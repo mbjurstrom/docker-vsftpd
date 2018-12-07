@@ -27,6 +27,7 @@ if [[ ! -v "$GROUP_ID" ]]; then
 	groupmod -g ${GROUP_ID} ftp
 fi
 chown -R ftp:ftp /home/vsftpd/
+chown -R ftp:ftp /var/log/vsftpd
 
 echo -e "${FTP_USER}\n${FTP_PASS}" > /etc/vsftpd/virtual_users.txt
 /usr/bin/db_load -T -t hash -f /etc/vsftpd/virtual_users.txt /etc/vsftpd/virtual_users.db

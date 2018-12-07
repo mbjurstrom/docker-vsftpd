@@ -20,10 +20,10 @@ fi
 # Create home dir and update vsftpd user db:
 mkdir -p "/home/vsftpd/${FTP_USER}"
 
-if [-v "$USER_ID$]; then
+if [-v "$USER_ID"]; then
 	usermod -u ${USER_ID} ftp
 fi
-if [-v "$GROUP_ID$]; then
+if [-v "$GROUP_ID"]; then
 	groupmod -u ${GROUP_ID} ftp
 fi
 chown -R ftp:ftp /home/vsftpd/

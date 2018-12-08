@@ -26,8 +26,7 @@ fi
 if [[ ! -v "$GROUP_ID" ]]; then
 	groupmod -g ${GROUP_ID} ftp
 fi
-chown -R ftp:ftp /home/vsftpd/
-chown -R ftp:ftp /var/log/vsftpd
+
 
 #do not overwrite existing virtual_users.txt and only add FTP_USER if it not already exists
 #TODO add check to update password if FTP_PASS do not equals the current one in file
@@ -41,6 +40,9 @@ fi
 for user in $(awk 'NR%2==1' /etc/vsftpd/virtual_users.txt); do
 	mkdir -p /home/vsftpd/$user
 done
+
+chown -R ftp:ftp /home/vsftpd/
+chown -R ftp:ftp /var/log/vsftpd
 
 # Set passive mode parameters:
 if [ "$PASV_ADDRESS" = "**IPv4**" ]; then

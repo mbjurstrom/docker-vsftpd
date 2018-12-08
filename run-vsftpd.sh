@@ -29,7 +29,10 @@ fi
 chown -R ftp:ftp /home/vsftpd/
 chown -R ftp:ftp /var/log/vsftpd
 
-echo -e "${FTP_USER}\n${FTP_PASS}" > /etc/vsftpd/virtual_users.txt
+#do not overwrite existing virtual_users.txt and only add FTP_USER if it not already exists
+if ! grep -Fxq "${FTP_USER}" /etc/vsftpd/virtual_users.txt; then
+	echo -e "${FTP_USER}\n${FTP_PASS}" >> /etc/vsftpd/virtual_users.txt
+	
 /usr/bin/db_load -T -t hash -f /etc/vsftpd/virtual_users.txt /etc/vsftpd/virtual_users.db
 
 # Set passive mode parameters:

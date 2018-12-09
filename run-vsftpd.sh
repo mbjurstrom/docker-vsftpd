@@ -50,7 +50,7 @@ if [ "$PASV_ADDRESS" = "**IPv4**" ]; then
 fi
 
 # Add ssl options
-if [$SSL_ENABLE = YES]; then
+if [ $SSL_ENABLE = "YES" ]; then
 	echo "ssl_enable=YES" >> /etc/vsftpd/vsftpd.conf
 	echo "allow_anon_ssl=NO" >> /etc/vsftpd/vsftpd.conf
 	echo "force_local_data_ssl=YES" >> /etc/vsftpd/vsftpd.conf

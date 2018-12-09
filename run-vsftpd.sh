@@ -69,6 +69,7 @@ if [$SSL_ENABLE = YES]; then
 	# mount your key and cert file as /etc/ssl/private/vsftpd.key and /etc/ssl/private/vsftpd.crt to override this
 	if [ ! -f "/etc/ssl/private/vsftpd.key" ] && [ ! -f /etc/ssl/private/vsftpd.crt ]; then
 		#generate stuff
+		openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt
 	elif ([ ! -f "/etc/ssl/private/vsftpd.key" ] && [ -f /etc/ssl/private/vsftpd.crt ]) || ([ -f "/etc/ssl/private/vsftpd.key" ] && [ ! -f /etc/ssl/private/vsftpd.crt ]); then
 		echo "Only one of /etc/ssl/private/vsftpd.key or /etc/ssl/private/vsftpd.crt exists exiting" 
 	fi

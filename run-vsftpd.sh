@@ -65,7 +65,8 @@ if [ $SSL_ENABLE = "YES" ]; then
 	echo "rsa_cert_file=/etc/ssl/certs/vsftpd.crt" >> /etc/vsftpd/vsftpd.conf
 	echo "rsa_private_key_file=/etc/ssl/private/vsftpd.key" >> /etc/vsftpd/vsftpd.conf
 	# Generate self-signed ssl files if no ones exist
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt
+	# TODO set better subject
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt -subj "/C=PE/ST=Lima/L=Lima/O=Acme Inc. /OU=IT Department/CN=acme.com"
 	# mount your key and cert file as /etc/ssl/private/vsftpd.key and /etc/ssl/private/vsftpd.crt to override this
 	if [ ! -f "/etc/ssl/private/vsftpd.key" ] && [ ! -f /etc/ssl/private/vsftpd.crt ]; then
 		#generate stuff

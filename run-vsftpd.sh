@@ -49,6 +49,32 @@ if [ "$PASV_ADDRESS" = "**IPv4**" ]; then
     export PASV_ADDRESS=$(/sbin/ip route|awk '/default/ { print $3 }')
 fi
 
+# Add ssl options
+if [$SSL_ENABLE = YES]; then
+	echo "ssl_enable=YES" >> /etc/vsftpd/vsftpd.conf
+	echo "allow_anon_ssl=NO" >> /etc/vsftpd/vsftpd.conf
+	echo "force_local_data_ssl=YES" >> /etc/vsftpd/vsftpd.conf
+	echo "force_local_logins_ssl=YES" >> /etc/vsftpd/vsftpd.conf
+	echo "ssl_tlsv1_1=YES" >> /etc/vsftpd/vsftpd.conf
+	echo "ssl_tlsv1_2=YES" >> /etc/vsftpd/vsftpd.conf
+	echo "ssl_tlsv1=NO" >> /etc/vsftpd/vsftpd.conf
+	echo "ssl_sslv2=NO" >> /etc/vsftpd/vsftpd.conf
+	echo "ssl_sslv3=NO" >> /etc/vsftpd/vsftpd.conf
+	echo "require_ssl_reuse=YES" >> /etc/vsftpd/vsftpd.conf
+	echo "ssl_ciphers=HIGH" >> /etc/vsftpd/vsftpd.conf
+	echo "rsa_cert_file=/etc/ssl/certs/vsftpd.crt" >> /etc/vsftpd/vsftpd.conf
+	echo "rsa_private_key_file=/etc/ssl/private/vsftpd.key" >> /etc/vsftpd/vsftpd.conf
+	# Generate self-signed ssl files if no ones exist
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt
+	# mount your key and cert file as /etc/ssl/private/vsftpd.key and /etc/ssl/private/vsftpd.crt to override this
+	if [ ! -f "/etc/ssl/private/vsftpd.key" ] && [ ! -f /etc/ssl/private/vsftpd.crt ]; then
+		#generate stuff
+	elif ([ ! -f "/etc/ssl/private/vsftpd.key" ] && [ -f /etc/ssl/private/vsftpd.crt ]) || ([ -f "/etc/ssl/private/vsftpd.key" ] && [ ! -f /etc/ssl/private/vsftpd.crt ]); then
+		echo "Only one of /etc/ssl/private/vsftpd.key or /etc/ssl/private/vsftpd.crt exists exiting" 
+	fi
+fi
+
+
 echo "pasv_address=${PASV_ADDRESS}" >> /etc/vsftpd/vsftpd.conf
 echo "pasv_max_port=${PASV_MAX_PORT}" >> /etc/vsftpd/vsftpd.conf
 echo "pasv_min_port=${PASV_MIN_PORT}" >> /etc/vsftpd/vsftpd.conf
